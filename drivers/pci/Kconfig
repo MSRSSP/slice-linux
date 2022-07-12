@@ -108,6 +108,12 @@ config PCI_PF_STUB
 
 	  When in doubt, say N.
 
+config PCI_VF_AS_PF
+	tristate "PCI VF as PF driver"
+	depends on PCI_IOV
+	help
+	  Kludge driver to fake a pre-established SR-IOV VF as a PF.
+
 config XEN_PCIDEV_FRONTEND
 	tristate "Xen PCI Frontend"
 	depends on XEN_PV

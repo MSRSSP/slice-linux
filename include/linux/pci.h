@@ -2176,6 +2176,7 @@ void pci_disable_sriov(struct pci_dev *dev);
 int pci_iov_sysfs_link(struct pci_dev *dev, struct pci_dev *virtfn, int id);
 int pci_iov_add_virtfn(struct pci_dev *dev, int id);
 void pci_iov_remove_virtfn(struct pci_dev *dev, int id);
+int pci_iov_fake_virt_as_phys(struct pci_bus *phys_bus, int phys_devfn, int vf_id);
 int pci_num_vf(struct pci_dev *dev);
 int pci_vfs_assigned(struct pci_dev *dev);
 int pci_sriov_set_totalvfs(struct pci_dev *dev, u16 numvfs);

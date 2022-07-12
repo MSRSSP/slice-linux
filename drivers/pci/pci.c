@@ -928,6 +928,43 @@ static void pci_disable_acs_redir(struct pci_dev *dev)
 	pci_info(dev, "disabled ACS redirect\n");
 }
 
+static const char *permit_probe_only_param;
+
+/**
+ * pci_permit_probe_device - implement allow-listing of PCI devices to probe
+ * @dev: the PCI device
+ *
+ * Returns false only if the permit_probe_only was specified, and the device does not match.
+ */
+bool pci_permit_probe_device(struct pci_dev *dev)
+{
+	const char *p;
+
+	if (!permit_probe_only_param)
+		return true;
+
+	p = permit_probe_only_param;
+	while (*p) {
+		int ret = pci_dev_str_match(dev, p, &p);
+		if (ret < 0) {
+			pr_info_once("PCI: Can't parse permit_probe_only parameter: %s\n",
+				     permit_probe_only_param);
+			break;
+		} else if (ret == 1) {
+			/* Found a match */
+			return true;
+		}
+
+		if (*p != ';' && *p != ',') {
+			/* End of param or invalid format */
+			break;
+		}
+		p++;
+	}
+
+	return false;
+}
+
 /**
  * pci_std_enable_acs - enable ACS on devices using standard ACS capabilities
  * @dev: the PCI device
@@ -6851,6 +6888,8 @@ static int __init pci_setup(char *str)
 				pci_add_flags(PCI_SCAN_ALL_PCIE_DEVS);
 			} else if (!strncmp(str, "disable_acs_redir=", 18)) {
 				disable_acs_redir_param = str + 18;
+			} else if (!strncmp(str, "permit_probe_only=", 18)) {
+				permit_probe_only_param = str + 18;
 			} else {
 				pr_err("PCI: Unknown option `%s'\n", str);
 			}
@@ -6862,12 +6901,11 @@ static int __init pci_setup(char *str)
 early_param("pci", pci_setup);
 
 /*
- * 'resource_alignment_param' and 'disable_acs_redir_param' are initialized
- * in pci_setup(), above, to point to data in the __initdata section which
- * will be freed after the init sequence is complete. We can't allocate memory
- * in pci_setup() because some architectures do not have any memory allocation
- * service available during an early_param() call. So we allocate memory and
- * copy the variable here before the init section is freed.
+ * The strings captured in pci_setup(), above, point to data in the __initdata
+ * section which will be freed after the init sequence is complete. We can't
+ * allocate memory in pci_setup() because some architectures do not have any
+ * memory allocation service available during an early_param() call. So we
+ * allocate memory and copy the variable here before the init section is freed.
  *
  */
 static int __init pci_realloc_setup_params(void)
@@ -6875,6 +6913,7 @@ static int __init pci_realloc_setup_params(void)
 	resource_alignment_param = kstrdup(resource_alignment_param,
 					   GFP_KERNEL);
 	disable_acs_redir_param = kstrdup(disable_acs_redir_param, GFP_KERNEL);
+	permit_probe_only_param = kstrdup(permit_probe_only_param, GFP_KERNEL);
 
 	return 0;
 }

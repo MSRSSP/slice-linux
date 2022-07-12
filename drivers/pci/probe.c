@@ -387,11 +387,13 @@ static void pci_read_bridge_windows(struct pci_dev *bridge)
 		 * writable.
 		 */
 		pci_read_config_dword(bridge, PCI_PREF_BASE_UPPER32, &pmem);
-		pci_write_config_dword(bridge, PCI_PREF_BASE_UPPER32,
-				       0xffffffff);
-		pci_read_config_dword(bridge, PCI_PREF_BASE_UPPER32, &tmp);
-		pci_write_config_dword(bridge, PCI_PREF_BASE_UPPER32, pmem);
-		if (tmp)
+		if (!pmem) {
+			pci_write_config_dword(bridge, PCI_PREF_BASE_UPPER32,
+					0xffffffff);
+			pci_read_config_dword(bridge, PCI_PREF_BASE_UPPER32, &tmp);
+			pci_write_config_dword(bridge, PCI_PREF_BASE_UPPER32, pmem);
+		}
+		if (pmem || tmp)
 			bridge->pref_64_window = 1;
 	}
 }
@@ -1892,6 +1894,12 @@ int pci_setup_device(struct pci_dev *dev)
 
 	switch (dev->hdr_type) {		    /* header type */
 	case PCI_HEADER_TYPE_NORMAL:		    /* standard header */
+		if (!pci_permit_probe_device(dev)) {
+			pci_info(dev, "probe disabled; device ignored\n");
+			pci_release_of_node(dev);
+			return -ENODEV;
+		}
+
 		if (class == PCI_CLASS_BRIDGE_PCI)
 			goto bad;
 		pci_read_irq(dev);
@@ -2873,7 +2881,7 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
 		 * multi-function device to a guest without passing function 0.
 		 * Look for them as well.
 		 */
-		if (jailhouse_paravirt() && nr_devs == 0) {
+		if (/* jailhouse_paravirt() && */ nr_devs == 0) {
 			for (fn = 1; fn < 8; fn++) {
 				dev = pci_scan_single_device(bus, devfn + fn);
 				if (dev)

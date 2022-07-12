@@ -310,6 +310,141 @@ failed:
 	return rc;
 }
 
+// mimic pci_scan_device + pci_setup_device + pci_iov_add_virtfn
+int pci_iov_fake_virt_as_phys(struct pci_bus *phys_bus, int phys_devfn, int vf_id)
+{
+	struct pci_bus *bus;
+	struct pci_dev *dev;
+	u32 class;
+	u16 nr_vf, total_vf;
+	int i;
+
+	// fake out these structures so we can re-use some existing code
+	// TODO: allocate pci_dev off the stack; it triggers a frame size warning
+	struct pci_dev physfn;
+	struct pci_sriov sriov;
+
+	memset(&physfn, 0, sizeof(physfn));
+	memset(&sriov, 0, sizeof(sriov));
+	physfn.sriov = &sriov;
+	physfn.is_physfn = 1;
+	physfn.cfg_size = PCI_CFG_SPACE_EXP_SIZE;
+	physfn.bus = phys_bus;
+	physfn.devfn = phys_devfn;
+	physfn.dev.parent = phys_bus->bridge;
+	physfn.dev.bus = &pci_bus_type;
+
+	dev_set_name(&physfn.dev, "%04x:%02x:%02x.%d", pci_domain_nr(phys_bus),
+		     phys_bus->number, PCI_SLOT(phys_devfn),
+		     PCI_FUNC(phys_devfn));
+
+	sriov.pos = pci_find_ext_capability(&physfn, PCI_EXT_CAP_ID_SRIOV);
+	if (!sriov.pos) {
+		pci_err(&physfn, "does not support SR-IOV\n");
+		return -ENODEV;
+	}
+
+	pci_read_config_word(&physfn, sriov.pos + PCI_SRIOV_TOTAL_VF, &total_vf);
+	BUG_ON(total_vf == 0);
+
+	pci_read_config_word(&physfn, sriov.pos + PCI_SRIOV_NUM_VF, &nr_vf);
+	BUG_ON(nr_vf > total_vf);
+
+	pci_info(&physfn, "%hu/%hu VFs enabled, using #%d", nr_vf, total_vf, vf_id);
+
+	if (vf_id < 0 || vf_id >= nr_vf) {
+		pci_err(&physfn, "invalid virtual function %d\n", vf_id);
+		return -ENODEV;
+	}
+
+	pci_read_config_word(&physfn, sriov.pos + PCI_SRIOV_VF_OFFSET, &sriov.offset);
+	pci_read_config_word(&physfn, sriov.pos + PCI_SRIOV_VF_STRIDE, &sriov.stride);
+
+	bus = virtfn_add_bus(physfn.bus, pci_iov_virtfn_bus(&physfn, vf_id));
+	BUG_ON(bus == NULL);
+
+	dev = pci_alloc_dev(bus);
+	BUG_ON(dev == NULL);
+
+	dev->devfn = pci_iov_virtfn_devfn(&physfn, vf_id);
+	pci_read_config_word(&physfn, PCI_VENDOR_ID, &dev->vendor);
+	pci_read_config_word(&physfn, sriov.pos + PCI_SRIOV_VF_DID, &dev->device);
+	dev->no_command_memory = 1;
+
+	dev->sysdata = bus->sysdata;
+	dev->dev.parent = bus->bridge;
+	dev->dev.bus = &pci_bus_type;
+	dev->hdr_type = PCI_HEADER_TYPE_NORMAL;
+	dev->multifunction = 0;
+	dev->error_state = pci_channel_io_normal;
+	set_pcie_port_type(dev);
+
+	pci_set_of_node(dev);
+	pci_set_acpi_fwnode(dev);
+	pci_dev_assign_slot(dev);
+
+	/*
+	 * Assume 32-bit PCI; let 64-bit PCI cards (which are far rarer)
+	 * set this higher, assuming the system even supports it.
+	 */
+	dev->dma_mask = 0xffffffff;
+
+	dev_set_name(&dev->dev, "%04x:%02x:%02x.%d", pci_domain_nr(dev->bus),
+		     dev->bus->number, PCI_SLOT(dev->devfn),
+		     PCI_FUNC(dev->devfn));
+
+	pci_read_config_dword(dev, PCI_CLASS_REVISION, &class);
+	dev->revision = class & 0xff;
+	dev->class = class >> 8;		    /* upper 3 bytes */
+
+	dev->cfg_size = PCI_CFG_SPACE_EXP_SIZE;
+
+	/* "Unknown power state" */
+	dev->current_state = PCI_UNKNOWN;
+
+	/* Early fixups, before probing the BARs */
+	pci_fixup_device(pci_fixup_early, dev);
+
+	pci_info(dev, "[%04x:%04x] type %02x class %#08x (fake SR-IOV VF as PF)\n",
+		 dev->vendor, dev->device, dev->hdr_type, dev->class);
+
+	pci_read_config_word(dev, PCI_SUBSYSTEM_VENDOR_ID, &dev->subsystem_vendor);
+	pci_read_config_word(dev, PCI_SUBSYSTEM_ID, &dev->subsystem_device);
+
+	// sriov_init + pci_iov_add_virtfn
+	for (i = 0; i < PCI_SRIOV_NUM_BARS; i++) {
+		struct resource *parent_res;
+		int bar64, rc;
+		u64 size;
+
+		bar64 = __pci_read_base(&physfn, pci_bar_unknown, &dev->resource[i],
+					sriov.pos + PCI_SRIOV_BAR + i * 4);
+		if (!dev->resource[i].flags)
+			continue;
+
+		pci_info(dev, "VF(n) BAR%d space: %pR\n", i, &dev->resource[i]);
+
+		size = resource_size(&dev->resource[i]);
+		BUG_ON(size & (PAGE_SIZE - 1));
+
+		dev->resource[i].name = pci_name(dev);
+		dev->resource[i].start += size * vf_id;
+
+		parent_res = pci_find_parent_resource(&physfn, &dev->resource[i]);
+		BUG_ON(parent_res == NULL);
+
+		rc = request_resource(parent_res, &dev->resource[i]);
+		BUG_ON(rc);
+
+		i += bar64;
+	}
+
+	pci_device_add(dev, bus);
+	pci_bus_add_device(dev);
+
+	return 0;
+}
+
 void pci_iov_remove_virtfn(struct pci_dev *dev, int id)
 {
 	char buf[VIRTFN_ID_LEN];
