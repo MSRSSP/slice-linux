@@ -143,7 +143,7 @@ CONFIG_IA32_AOUT                                mark<ENFORCED> note<LP:#1818552>
 # Menu: Boot options
 CONFIG_CMDLINE                                  policy<{'arm64': '"console=ttyAMA0"', 'armhf': '""', 'ppc64el': '""'}>
 CONFIG_EFI                                      policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y'}>
-CONFIG_DMI                                      policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y'}>
+#CONFIG_DMI                                      policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y'}>
 CONFIG_KEXEC                                    policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y', 's390x': 'y'}>
 CONFIG_CRASH_DUMP                               policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y', 's390x': 'y'}>
 #
@@ -1685,8 +1685,8 @@ CONFIG_EDAC_I5000                               policy<{'amd64': 'm'}>
 CONFIG_EDAC_I5100                               policy<{'amd64': 'm'}>
 CONFIG_EDAC_I7300                               policy<{'amd64': 'm'}>
 CONFIG_EDAC_SBRIDGE                             policy<{'amd64': 'm'}>
-CONFIG_EDAC_SKX                                 policy<{'amd64': 'm'}>
-CONFIG_EDAC_I10NM                               policy<{'amd64': 'm'}>
+#CONFIG_EDAC_SKX                                 policy<{'amd64': 'm'}>
+#CONFIG_EDAC_I10NM                               policy<{'amd64': 'm'}>
 CONFIG_EDAC_PND2                                policy<{'amd64': 'm'}>
 CONFIG_EDAC_IGEN6                               policy<{'amd64': 'm'}>
 CONFIG_EDAC_LAYERSCAPE                          policy<{'arm64': 'm'}>
@@ -2631,8 +2631,8 @@ CONFIG_CEC_MESON_G12A_AO                        policy<{'arm64': 'm', 'armhf': '
 CONFIG_CEC_GPIO                                 policy<{'amd64': 'm', 'arm64-generic': '-', 'arm64-generic-64': '-'}>
 CONFIG_CEC_SAMSUNG_S5P                          policy<{'armhf': 'n'}>
 CONFIG_CEC_TEGRA                                policy<{'arm64': 'm', 'armhf': 'm'}>
-CONFIG_CEC_SECO                                 policy<{'amd64': 'm'}>
-CONFIG_CEC_SECO_RC                              policy<{'amd64': 'y'}>
+#CONFIG_CEC_SECO                                 policy<{'amd64': 'm'}>
+#CONFIG_CEC_SECO_RC                              policy<{'amd64': 'y'}>
 CONFIG_USB_PULSE8_CEC                           policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_USB_RAINSHADOW_CEC                       policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 
@@ -2825,8 +2825,8 @@ CONFIG_STM_SOURCE_FTRACE                        policy<{'amd64': 'm', 'arm64': '
 CONFIG_HWMON                                    policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y', 's390x': 'n'}>
 CONFIG_HWMON_DEBUG_CHIP                         policy<{'amd64': 'n', 'arm64': 'n', 'armhf': 'n', 'ppc64el': 'n', 's390x': '-'}>
 CONFIG_SENSORS_AAEON                            policy<{'amd64': 'm'}>
-CONFIG_SENSORS_ABITUGURU                        policy<{'amd64': 'm'}>
-CONFIG_SENSORS_ABITUGURU3                       policy<{'amd64': 'm'}>
+#CONFIG_SENSORS_ABITUGURU                        policy<{'amd64': 'm'}>
+#CONFIG_SENSORS_ABITUGURU3                       policy<{'amd64': 'm'}>
 CONFIG_SENSORS_AD7314                           policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_SENSORS_AD7414                           policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_SENSORS_AD7418                           policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
@@ -3913,7 +3913,7 @@ CONFIG_MOUSE_PS2_LOGIPS2PP                      policy<{'amd64': 'y', 'arm64': '
 CONFIG_MOUSE_PS2_SYNAPTICS                      policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y'}>
 CONFIG_MOUSE_PS2_SYNAPTICS_SMBUS                policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y'}>
 CONFIG_MOUSE_PS2_CYPRESS                        policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y'}>
-CONFIG_MOUSE_PS2_LIFEBOOK                       policy<{'amd64': 'y'}>
+#CONFIG_MOUSE_PS2_LIFEBOOK                       policy<{'amd64': 'y'}>
 CONFIG_MOUSE_PS2_TRACKPOINT                     policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y'}>
 CONFIG_MOUSE_PS2_ELANTECH                       policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y'}>
 CONFIG_MOUSE_PS2_ELANTECH_SMBUS                 policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y'}>
@@ -4187,7 +4187,7 @@ CONFIG_LEDS_CLASS                               policy<{'amd64': 'y', 'arm64': '
 CONFIG_LEDS_BRIGHTNESS_HW_CHANGED               policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y'}>
 CONFIG_LEDS_88PM860X                            policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_LEDS_AN30259A                            policy<{'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm'}>
-CONFIG_LEDS_APU                                 policy<{'amd64': 'm'}>
+#CONFIG_LEDS_APU                                 policy<{'amd64': 'm'}>
 CONFIG_LEDS_AW2013                              policy<{'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm'}>
 CONFIG_LEDS_BCM6328                             policy<{'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm'}>
 CONFIG_LEDS_BCM6358                             policy<{'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm'}>
@@ -4207,7 +4207,7 @@ CONFIG_LEDS_LP3944                              policy<{'amd64': 'm', 'arm64': '
 CONFIG_LEDS_LP3952                              policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_LEDS_LP8788                              policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_LEDS_LP8860                              policy<{'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm'}>
-CONFIG_LEDS_CLEVO_MAIL                          policy<{'amd64': 'm'}>
+#CONFIG_LEDS_CLEVO_MAIL                          policy<{'amd64': 'm'}>
 CONFIG_LEDS_PCA955X                             policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_LEDS_PCA955X_GPIO                        policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y'}>
 CONFIG_LEDS_PCA963X                             policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
@@ -4219,7 +4219,7 @@ CONFIG_LEDS_DAC124S085                          policy<{'amd64': 'm', 'arm64': '
 CONFIG_LEDS_PWM                                 policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_LEDS_REGULATOR                           policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_LEDS_BD2802                              policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
-CONFIG_LEDS_INTEL_SS4200                        policy<{'amd64': 'm'}>
+#CONFIG_LEDS_INTEL_SS4200                        policy<{'amd64': 'm'}>
 CONFIG_LEDS_LT3593                              policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_LEDS_ADP5520                             policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_LEDS_MC13783                             policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm'}>
@@ -4238,7 +4238,7 @@ CONFIG_LEDS_BLINKM                              policy<{'amd64': 'm', 'arm64': '
 CONFIG_LEDS_POWERNV                             policy<{'ppc64el': 'm'}>
 CONFIG_LEDS_SYSCON                              policy<{'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y'}>
 CONFIG_LEDS_PM8058                              policy<{'armhf': 'm'}>
-CONFIG_LEDS_MLXCPLD                             policy<{'amd64': 'm'}>
+#CONFIG_LEDS_MLXCPLD                             policy<{'amd64': 'm'}>
 CONFIG_LEDS_MLXREG                              policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_LEDS_USER                                policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm', 'ppc64el': 'm', 's390x': '-'}>
 CONFIG_LEDS_NIC78BX                             policy<{'amd64': 'm'}>
@@ -4683,14 +4683,14 @@ CONFIG_HYPERV_BALLOON                           policy<{'amd64': 'm', 'arm64': '
 
 # Menu: Device Drivers >> Microsoft Surface Platform-Specific Device Drivers
 CONFIG_SURFACE_PLATFORMS                        policy<{'amd64': 'y', 'arm64': 'y'}>
-CONFIG_SURFACE3_WMI                             policy<{'amd64': 'm'}>
+#CONFIG_SURFACE3_WMI                             policy<{'amd64': 'm'}>
 CONFIG_SURFACE_3_BUTTON                         policy<{'amd64': 'm', 'arm64': 'n'}>
 CONFIG_SURFACE_3_POWER_OPREGION                 policy<{'amd64': 'm', 'arm64': 'n'}>
 CONFIG_SURFACE_ACPI_NOTIFY                      policy<{'amd64': 'm', 'arm64': 'm'}>
 CONFIG_SURFACE_AGGREGATOR_CDEV                  policy<{'amd64': 'm', 'arm64': 'm'}>
 CONFIG_SURFACE_AGGREGATOR_REGISTRY              policy<{'amd64': 'm', 'arm64': 'm'}>
 CONFIG_SURFACE_DTX                              policy<{'amd64': 'm', 'arm64': 'm'}>
-CONFIG_SURFACE_GPE                              policy<{'amd64': 'm', 'arm64': 'm'}>
+#CONFIG_SURFACE_GPE                              policy<{'amd64': 'm', 'arm64': 'm'}>
 CONFIG_SURFACE_HOTPLUG                          policy<{'amd64': 'm', 'arm64': 'm'}>
 CONFIG_SURFACE_PLATFORM_PROFILE                 policy<{'amd64': 'm', 'arm64': 'm'}>
 CONFIG_SURFACE_PRO3_BUTTON                      policy<{'amd64': 'm', 'arm64': 'n'}>
@@ -7545,7 +7545,7 @@ CONFIG_PINCTRL_UNIPHIER_PXS3                    policy<{'armhf': '-'}>
 
 # Menu: Device Drivers >> Platform support for Chrome hardware
 CONFIG_CHROME_PLATFORMS                         policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y'}>
-CONFIG_CHROMEOS_LAPTOP                          policy<{'amd64': 'm'}>
+#CONFIG_CHROMEOS_LAPTOP                          policy<{'amd64': 'm'}>
 CONFIG_CHROMEOS_PSTORE                          policy<{'amd64': 'm'}>
 CONFIG_CHROMEOS_TBMC                            policy<{'amd64': 'm', 'arm64': 'm'}>
 CONFIG_CROS_KBD_LED_BACKLIGHT                   policy<{'amd64': 'm', 'arm64': 'm'}>
@@ -10433,7 +10433,7 @@ CONFIG_SYSTEM76_ACPI                            policy<{'amd64': 'm'}>
 CONFIG_TOPSTAR_LAPTOP                           policy<{'amd64': 'm'}>
 CONFIG_I2C_MULTI_INSTANTIATE                    policy<{'amd64': 'm'}>
 CONFIG_MLX_PLATFORM                             policy<{'amd64': 'm'}>
-CONFIG_TOUCHSCREEN_DMI                          policy<{'amd64': 'y'}>
+#CONFIG_TOUCHSCREEN_DMI                          policy<{'amd64': 'y'}>
 CONFIG_INTEL_IPS                                policy<{'amd64': 'm'}>
 CONFIG_INTEL_SCU_PCI                            policy<{'amd64': 'y'}>
 CONFIG_INTEL_SCU_PLATFORM                       policy<{'amd64': 'm'}>
@@ -10443,20 +10443,20 @@ CONFIG_INTEL_SCU_IPC_UTIL                       policy<{'amd64': 'm'}>
 CONFIG_X86_PLATFORM_DRIVERS_DELL                policy<{'amd64': 'y'}>
 CONFIG_ALIENWARE_WMI                            policy<{'amd64': 'm'}>
 CONFIG_DCDBAS                                   policy<{'amd64': 'm'}>
-CONFIG_DELL_LAPTOP                              policy<{'amd64': 'm'}>
+#CONFIG_DELL_LAPTOP                              policy<{'amd64': 'm'}>
 CONFIG_DELL_RBU                                 policy<{'amd64': 'm'}>
 CONFIG_DELL_RBTN                                policy<{'amd64': 'm'}>
 CONFIG_DELL_SMO8800                             policy<{'amd64': 'm'}>
 CONFIG_DELL_WMI_AIO                             policy<{'amd64': 'm'}>
 CONFIG_DELL_WMI_LED                             policy<{'amd64': 'm'}>
-CONFIG_DELL_WMI_SYSMAN                          policy<{'amd64': 'm'}>
+#CONFIG_DELL_WMI_SYSMAN                          policy<{'amd64': 'm'}>
 
 # Menu: Device Drivers >> X86 Platform Specific Device Drivers >> Dell X86 Platform Specific Device Drivers >> Dell SMBIOS driver
 CONFIG_DELL_SMBIOS                              policy<{'amd64': 'm'}>
 CONFIG_DELL_SMBIOS_WMI                          policy<{'amd64': 'y'}>
 CONFIG_DELL_SMBIOS_SMM                          policy<{'amd64': 'y'}>
-CONFIG_DELL_WMI                                 policy<{'amd64': 'm'}>
-CONFIG_DELL_WMI_PRIVACY                         policy<{'amd64': 'y'}>
+#CONFIG_DELL_WMI                                 policy<{'amd64': 'm'}>
+#CONFIG_DELL_WMI_PRIVACY                         policy<{'amd64': 'y'}>
 
 # Menu: Device Drivers >> X86 Platform Specific Device Drivers >> Intel x86 Platform Specific Device Drivers
 CONFIG_INTEL_ATOMISP2_LED                       policy<{'amd64': 'm'}>
@@ -11120,8 +11120,8 @@ CONFIG_ARM_SDE_INTERFACE                        policy<{'arm64': 'y'}>
 CONFIG_EDD                                      policy<{'amd64': 'y'}>
 CONFIG_EDD_OFF                                  policy<{'amd64': 'y'}>
 CONFIG_FIRMWARE_MEMMAP                          policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y', 's390x': 'n'}>
-CONFIG_DMIID                                    policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y'}>
-CONFIG_DMI_SYSFS                                policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm'}>
+#CONFIG_DMIID                                    policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y'}>
+#CONFIG_DMI_SYSFS                                policy<{'amd64': 'm', 'arm64': 'm', 'armhf': 'm'}>
 CONFIG_ISCSI_IBFT_FIND                          policy<{'amd64': 'y'}>
 CONFIG_ISCSI_IBFT                               policy<{'amd64': 'm', 'arm64': 'm'}>
 CONFIG_RASPBERRYPI_FIRMWARE                     policy<{'arm64': 'y'}>
@@ -11613,7 +11613,7 @@ CONFIG_DEBUG_INFO_BTF                           flag<REVIEW> note<Needs newer pa
 # Menu: Kernel hacking >> Compile-time checks and compiler options >> Compile the kernel with debug info >> DWARF version
 CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT       policy<{'amd64': 'n', 'arm64': 'n', 'armhf': 'n', 'ppc64el': 'n', 's390x': 'n'}>
 CONFIG_DEBUG_INFO_DWARF4                        policy<{'amd64': 'y', 'arm64': 'y', 'armhf': 'y', 'ppc64el': 'y', 's390x': 'y'}>
-CONFIG_DEBUG_INFO_DWARF5                        policy<{'amd64': 'n', 'arm64': 'n', 'armhf': 'n', 'ppc64el': 'n', 's390x': 'n'}>
+#CONFIG_DEBUG_INFO_DWARF5                        policy<{'amd64': 'n', 'arm64': 'n', 'armhf': 'n', 'ppc64el': 'n', 's390x': 'n'}>
 
 # Menu: Kernel hacking >> Debug Oops, Lockups and Hangs
 CONFIG_PANIC_ON_OOPS                            policy<{'amd64': 'n', 'arm64': 'n', 'armhf': 'n', 'ppc64el': 'n', 's390x': 'n'}>
@@ -13588,7 +13588,7 @@ CONFIG_SCHED_TOPOLOGY                           policy<{'s390x': 'y'}>
 # Menu: Processor type and features >> Architecture: x86
 CONFIG_X86_FEATURE_NAMES                        policy<{'amd64': 'y'}>
 CONFIG_X86_X2APIC                               policy<{'amd64': 'y'}>
-CONFIG_X86_MPPARSE                              policy<{'amd64': 'y'}>
+#CONFIG_X86_MPPARSE                              policy<{'amd64': 'y'}>
 CONFIG_RETPOLINE                                policy<{'amd64': 'y'}>
 CONFIG_X86_CPU_RESCTRL                          policy<{'amd64': 'y'}>
 CONFIG_X86_EXTENDED_PLATFORM                    policy<{'amd64': 'y'}>
