@@ -422,29 +422,23 @@ int pci_iov_fake_virt_as_phys(struct pci_bus *phys_bus, int phys_devfn, int vf_i
 		if (!dev->resource[i].flags)
 			continue;
 
-		pci_info(dev, "VF(n) BAR%d space: %pR\n", i, &dev->resource[i]);
+		pci_info(dev, "VF0 BAR%d: %pR\n", i, &dev->resource[i]);
 
 		size = resource_size(&dev->resource[i]);
 		BUG_ON(size & (PAGE_SIZE - 1));
 
 		dev->resource[i].name = pci_name(dev);
 		dev->resource[i].start += size * vf_id;
+		dev->resource[i].end = dev->resource[i].start + size - 1;
+
+		if (vf_id != 0)
+			pci_info(dev, "VF%d BAR%d: %pR\n", vf_id, i, &dev->resource[i]);
 
 		parent_res = pci_find_parent_resource(&physfn, &dev->resource[i]);
 		BUG_ON(parent_res == NULL);
 
 		rc = request_resource(parent_res, &dev->resource[i]);
-		if (rc)
-		{
-			// XXX: Why does this fail for vf_id > 0?
-			// Print some debug info but blindly continue.
-			struct resource *res;
-
-			pci_info(dev, "VF(n) BAR%d parent: %pR\n", i, parent_res);
-			res = request_resource_conflict(parent_res, &dev->resource[i]);
-			pci_info(dev, "VF(n) BAR%d unexpected conflict: %pR\n", i, res);
-		}
-		//BUG_ON(rc);
+		BUG_ON(rc);
 
 		i += bar64;
 	}
